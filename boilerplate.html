@@ -175,6 +175,20 @@ Meteor.publish("cart", function(cartId) {
 
 
     <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  check(cartId, String);
+  return Carts.find({
+    _id: cartId
+  });
+});
+</code></pre>
+    </section>
+
+
+
+
+    <section class="slide">
   <pre class="language-javascript"><code class="language-javascript">
 Meteor.methods({
   removeCart: function(cartId) {
@@ -203,6 +217,22 @@ Meteor.methods({
     var cart = Carts.findOne({_id: {$gte: "&lt;my cart id&gt;"}});
     if (cart.userId === this.userId) {
       Carts.remove({_id: {$gte: "&lt;my cart id&gt;"}});
+    }
+  }
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+  <pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    check(cartId, String);
+    var cart = Carts.findOne(cartId);
+    if (cart.userId === this.userId) {
+      Carts.remove(cartId);
     }
   }
 });
