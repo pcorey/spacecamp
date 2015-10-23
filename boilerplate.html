@@ -13,7 +13,7 @@
   <!-- Extension CSS files go here. Remove or add as needed. -->
   <link rel="stylesheet" media="screen" href="extensions/goto/deck.goto.css">
   <link rel="stylesheet" media="screen" href="extensions/menu/deck.menu.css">
-  <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css">
+  <!-- <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css"> -->
   <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
   <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
 
@@ -79,6 +79,10 @@
         <div class="bigtext">
           <span>Who Am I?</span>
           <span>(and why you should care)</span>
+        </div>
+        <div class="slide">
+          <h1 style="text-align: center; font-weight: 100; margin-bottom: 0;">@petecorey</h1>
+          <h1 style="text-align: center; font-weight: 200; margin: 0;">East5th.co</h1>
         </div>
     </section>
 
@@ -236,7 +240,7 @@ Meteor.users.update(Meteor.userId(), {
 
     <section class="slide">
 <pre class="language-javascript"><code class="language-javascript">
-Meteor.users.deny({
+Meteor.users.allow({
   ...
   var changeRoles = {$addToSet: {roles: String}};
   var changeUsername = {$set: {username: String}};
@@ -526,10 +530,10 @@ Meteor.users.allow({
     <!-- Begin extension snippets. Add or remove as needed. -->
 
     <!-- deck.navigation snippet -->
-    <div aria-role="navigation">
+    <!-- <div aria-role="navigation">
       <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
       <a href="#" class="deck-next-link" title="Next">&#8594;</a>
-    </div>
+    </div> -->
 
     <!-- deck.goto snippet -->
     <form action="." method="get" class="goto-form">
