@@ -67,7 +67,7 @@
 
     <section class="slide">
         <div class="bigtext">
-          <span>7 Reasons To</span>
+          <span>Why you should</span>
           <span>Always</span>
           <span>Check Your Arguments</span>
         </div>
@@ -84,11 +84,6 @@
 
 
 
-    <section class="slide">
-        <img src="/img/cats.png" style="max-height: 70vh;">
-    </section>
-
-
 
     <section class="slide">
         <div class="bigtext">
@@ -99,20 +94,189 @@
 
 
 
+
+    <!-- <section class="slide">
+        <div class="bigtext">
+          <span>Meteor Security</span>
+          <span>Landscape</span>
+        </div>
+    </section> -->
     <section class="slide">
-      <h1>Users can pass in anything</h1>
+        <div class="bigtext">
+          <span>What's in an</span>
+          <span>Argument</span>
+        </div>
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>What is Check?</span>
+        </div>
+<pre class="language-javascript slide"><code class="language-javascript">
+check(userId, String);
+</code></pre>
+<pre class="language-bash slide"><code class="language-javascript">
+Match error: Expected string, got number
+</code></pre>
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span class="">But Why?</span>
+        </div>
+    </section>
+
+
+
+    <!-- <section class="slide">
+      <div class="bigtext">
+        <span class="">NoSQL Injection</span>
+      </div>
+    </section> -->
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  return Carts.find({
+    _id: cartId
+  });
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.subscribe("cart", {$gte: ""});
+</code></pre>
 <pre class="language-javascript slide"><code class="language-javascript">
 Meteor.publish("cart", function(cartId) {
-  return Carts.find(cartId);
+  return Carts.find({
+    _id: {$gte: ""}
+  });
+});
+</code></pre>
+    </section>
+
+
+
+
+    <section class="slide">
+  <pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    var cart = Carts.findOne(cartId);
+    if (cart.userId === this.userId) {
+      Carts.remove(cartId);
+    }
+  }
+});
+</code></pre>
+    </section>
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.call("removeCart", {_id: {$gte: "&lt;my cart id&gt;"}});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+  <pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    var cart = Carts.findOne({_id: {$gte: "&lt;my cart id&gt;"}});
+    if (cart.userId === this.userId) {
+      Carts.remove({_id: {$gte: "&lt;my cart id&gt;"}});
+    }
+  }
+});
+</code></pre>
+    </section>
+
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.users.deny({
+  update: function(userId, doc, fields, modifier) {
+    return !Roles.userIsInRole(userId, "admin") &&
+            modifier.$addToSet.roles;
+  }
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.users.update(Meteor.userId(), {
+  $push: { roles: "admin" }
 });
 </code></pre>
 <pre class="language-javascript slide"><code class="language-javascript">
-Meteor.subscribe("cart", {});
+Meteor.users.update(Meteor.userId(), {
+  $set: { roles: ["admin"] }
+});
+</code></pre>
+    </section>
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.users.deny({
+  ...
+  var changeRoles = {$addToSet: {roles: String}};
+  var changeUsername = {$set: {username: String}};
+
+  if (Roles.userIsInRole(userId, "admin"))
+    return Match.test(modifier,
+           Match.OneOf(changeRoles, changeUsername));
+  else
+    return Match.test(modifier, changeUsername);
+</code></pre>
+    </section>
+
+
+
+
+    <!-- <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  getCart: function(cartId) {
+    return Carts.findOne(cartId);
+  }
+});
+</code></pre>
+    </section> -->
+
+
+
+
+    <!-- <section class="slide">
+      <div class="bigtext">
+        <span class="">Works In All Collection Methods</span>
+      </div>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("getCart", {_id: {$nin: []}});
 </code></pre>
 <pre class="language-javascript slide"><code class="language-javascript">
-Meteor.publish("cart", function(cartId) {
-  return Carts.find({});
-});
+return Carts.findOne({_id: {$nin: []}});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("getCart", {_id: {$nin: ["&lt;first id&gt;"]}});
 </code></pre>
     </section>
 
@@ -306,7 +470,56 @@ Meteor.users.allow({
   }
 });
 </code></pre>
+    </section> -->
+
+
+
+    <section class="slide">
+        <h1 style="text-align: center;">Why should you be checking?</h1>
+        <div class="bigtext">
+          <span class="slide">Modifiers Are Hard</span>
+          <span class="slide">NOSQL Injection</span>
+          <span class="slide">Users Lie</span>
+        </div>
     </section>
+
+
+
+    <section class="slide">
+        <h1 style="text-align: center;">Where should you be checking?</h1>
+        <div class="bigtext">
+          <span class="slide">Methods</span>
+          <span class="slide">Publications</span>
+          <span class="slide">Collection Validators</span>
+        </div>
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span class="">Tools to help you check</span>
+        </div>
+        <p class="slide"><code class="language-javascript">audit-argument-checks</code></p>
+        <p class="slide"><code class="language-javascript">aldeed:simple-schema</code></p>
+        <p class="slide"><code class="language-javascript">east5th:check-checker</code></p>
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span class="">Check is your</span>
+          <span class="">Friend!</span>
+        </div>
+    </section>
+
+
+
+
+
 
     <!-- End slides. -->
 
