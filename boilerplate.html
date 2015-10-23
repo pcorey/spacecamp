@@ -18,7 +18,7 @@
   <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
 
   <!-- Style theme. More available in /themes/style/ or create your own. -->
-  <link rel="stylesheet" media="screen" href="themes/style/web-2.0.css">
+  <link rel="stylesheet" media="screen" href="themes/style/east5th.css">
 
   <!-- Transition theme. More available in /themes/transition/ or create your own. -->
   <link rel="stylesheet" media="screen" href="themes/transition/horizontal-slide.css">
@@ -28,22 +28,284 @@
 
   <!-- Required Modernizr file -->
   <script src="modernizr.custom.js"></script>
+
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism.css">
+
+  <script src="/js/prism.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bigtext.js"></script>
+  <script src="/js/typekit.js"></script>
+  <script>
+
+  function show() {
+    $(function() {
+      $('.bigtext').bigtext();
+      $('.content').css('opacity', 1);
+    });
+  }
+
+  try {
+    Typekit.load({
+      async: true,
+      inactive: show,
+      active: show
+    });
+  } catch(e) {
+    show();
+  }</script>
 </head>
 <body>
   <div class="deck-container">
 
     <!-- Begin slides. Just make elements with a class of slide. -->
 
+
+
     <section class="slide">
-      <h1>Slide</h1>
+        <div class="bigtext">
+          <span>7 Reasons To</span>
+          <span>Always</span>
+          <span>Check Your Arguments</span>
+        </div>
+    </section>
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>Who Am I?</span>
+          <span>(and why you should care)</span>
+        </div>
+    </section>
+
+
+
+    <section class="slide">
+        <img src="/img/cats.png" style="max-height: 70vh;">
+    </section>
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>My Background</span>
+          <span>And Motivation</span>
+        </div>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>Users can pass in anything</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  return Carts.find(cartId);
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.subscribe("cart", {});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  return Carts.find({});
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>Including MongoDB Query Operators</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  return Carts.find({_id: cartId});
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.subscribe("cart", {$gte: ""});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+  return Carts.find({_id: {$gte: ""}});
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.publish("cart", function(cartId) {
+
+  check(cartId, String);
+
+  return Carts.find(cartId);
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>Including Unexpected Query Operators</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.methods({
+  getCart: function(cartId) {
+    return Carts.findOne(cartId);
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("getCart", {_id: {$nin: []}});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+return Carts.findOne({_id: {$nin: []}});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("getCart", {_id: {$nin: ["&lt;first id&gt;"]}});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  getCart: function(cartId) {
+    check(cartId, String);
+    return Carts.findOne(cartId);
+  }
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>And Even Downright Nasty Operators</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.methods({
+  getCart: function(cartId) {
+    return Carts.findOne(cartId);
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+var loop = "d = new Date; " +
+           "do {c = new Date;} " +
+           "while (c - d < 10000);";
+Meteor.call("getCart", {$where: loop});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>Mixing Database Operations is Dangerous</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    var cart = Carts.findOne({_id: cartId});
+    if (cart.userId === this.userId) {
+      Carts.remove({_id: cartId});
+    }
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("removeCart", {$gte: "&lt;my cart id&gt;"});
+</code></pre>
     </section>
 
     <section class="slide">
-      <h1>Content</h1>
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    check(cartId, String);
+    var cart = Carts.findOne({_id: cartId});
+    if (cart.userId === this.userId) {
+      Carts.remove({_id: cartId});
+    }
+  }
+});
+</code></pre>
+    </section>
+
+
+
+    <section class="slide">
+      <h1>Malicious Users Lie</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.publish("users", function(userId) {
+  if (Roles.userIsInRole(userId, "admin")) {
+    return Meteor.users.find();
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.subscribe("users", Meteor.userId());
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.subscribe("users", "&lt;admin id&gt;");
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.subscribe("users", {roles: ["admin"]});
+</code></pre>
     </section>
 
     <section class="slide">
-      <h1>Here</h1>
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.publish("users", function(userId) {
+  check(userId, String);
+  if (Roles.userIsInRole(userId, "admin")) {
+    return Meteor.users.find();
+  }
+});
+</code></pre>
+    </section>
+
+    <section class="slide">
+      <h1>Modifiers Are Even Harder to get right</h1>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.users.deny({
+  update: function(userId, doc, fields, modifier) {
+    return !Roles.userIsInRole(userId, "admin") &&
+           modifier.$addToSet.roles;
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.users.update(Meteor.userId(), {
+  $push: {
+    roles: "admin"
+  }
+});
+</code></pre>
+    </section>
+
+    <section class="slide">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.users.allow({
+  update: function(userId, doc, fields, modifier) {
+    
+    var changeRoles = {$addToSet: {roles: String}};
+    var changeUsername = {$set: {username: String}};
+
+    if (Roles.userIsInRole(userId, "admin")) {
+      return Match.test(modifier,
+               Match.OneOf(changeRoles,
+                           changeUsername));
+    }
+    else {
+      return Match.test(modifier, changeUsername);
+    }
+  }
+});
+</code></pre>
     </section>
 
     <!-- End slides. -->
@@ -56,13 +318,6 @@
       <a href="#" class="deck-next-link" title="Next">&#8594;</a>
     </div>
 
-    <!-- deck.status snippet -->
-    <p class="deck-status" aria-role="status">
-      <span class="deck-status-current"></span>
-      /
-      <span class="deck-status-total"></span>
-    </p>
-
     <!-- deck.goto snippet -->
     <form action="." method="get" class="goto-form">
       <label for="goto-slide">Go to slide:</label>
@@ -71,11 +326,19 @@
       <input type="submit" value="Go">
     </form>
 
-    <!-- End extension snippets. -->
+    <div class="header">
+      <div class="wrapper">
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <img src="/img/east5th.svg">
+      </div>
+    </div>
   </div>
 
 <!-- Required JS files. -->
-<script src="jquery.min.js"></script>
 <script src="core/deck.core.js"></script>
 
 <!-- Extension JS files. Add or remove as needed. -->
